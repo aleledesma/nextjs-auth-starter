@@ -35,7 +35,7 @@ export default function LoginPage() {
       })
 
       if (response?.error) {
-        setError("Invalid credentials")
+        setError(response.error)
         return
       }
 

@@ -2,6 +2,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { type NextAuthOptions } from "next-auth"
 import prisma from "@/lib/prisma"
 import bcrypt from "bcryptjs"
+import z from "zod"
+import { loginFormSchema } from "./zod/schemas/authSchemas"
 
 export const authOptions = {
   providers: [
@@ -13,16 +15,16 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        const { success } = z.safeParse(loginFormSchema, credentials)
+        if (!success || !credentials?.email || !credentials?.password) {
           throw new Error("Invalid credentials")
         }
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         })
-
         if (!user) {
-          throw new Error("Invalid credentials")
+          throw new Error("No user found")
         }
 
         const isCorrectPassword = await bcrypt.compare(
