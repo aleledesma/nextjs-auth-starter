@@ -20,9 +20,9 @@
 
 - [x] Validar datos de login en el backend (authorize nextauth function)
 
-- [ ] Eliminar lógica referida a posts para dejar el template más limpio
+- [x] Eliminar lógica referida a posts para dejar el template más limpio
 
-- [ ] Agregar roles básicos: ej: "admin" y "user"
+- [x] Agregar roles básicos: ej: "admin" y "user"
 
 - [ ] Agregar ruta protegida /dashboard para ejemplificar autorización
 
