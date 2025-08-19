@@ -4,30 +4,30 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { signIn } from "next-auth/react"
+import { useForm } from "react-hook-form"
+import z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { registerFormSchema } from "@/zod/schemas/authSchemas"
 
 export default function RegisterPage() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof registerFormSchema>>({
+    resolver: zodResolver(registerFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  })
+
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    try {
-      event.preventDefault()
-      const formData = new FormData(event.currentTarget)
-      const signInResult = await signIn("credentials", {
-        ...Object.fromEntries(formData),
-        redirect: false,
-      })
-
-      if (signInResult?.error) {
-        setError("Failed to sign in after registration")
-        return
-      }
-
-      router.push("/")
-      router.refresh()
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Registration failed")
-    }
+  async function onSubmit(values: z.infer<typeof registerFormSchema>) {
+    console.log(values)
   }
 
   return (
@@ -38,7 +38,7 @@ export default function RegisterPage() {
             Create your account
           </h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-6">
             <div>
               <label
@@ -49,12 +49,16 @@ export default function RegisterPage() {
               </label>
               <input
                 id="name"
-                name="name"
                 type="text"
-                required
                 className="mt-2 appearance-none relative block w-full px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Full name"
+                {...register("name")}
               />
+              {errors.name && (
+                <span className="text-sm text-red-500">
+                  {errors.name.message}
+                </span>
+              )}
             </div>
             <div>
               <label
@@ -65,12 +69,15 @@ export default function RegisterPage() {
               </label>
               <input
                 id="email"
-                name="email"
-                type="email"
-                required
                 className="mt-2 appearance-none relative block w-full px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
+                {...register("email")}
               />
+              {errors.email && (
+                <span className="text-sm text-red-500">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
             <div>
               <label
@@ -81,17 +88,21 @@ export default function RegisterPage() {
               </label>
               <input
                 id="password"
-                name="password"
                 type="password"
-                required
                 className="mt-2 appearance-none relative block w-full px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
+                {...register("password")}
               />
+              {errors.password && (
+                <span className="text-sm text-red-500">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
+            <div className="text-red-500 text-sm text-center mt-3">{error}</div>
           )}
 
           <div>
