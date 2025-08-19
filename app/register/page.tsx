@@ -25,9 +25,32 @@ export default function RegisterPage() {
 
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
-    console.log(values)
+    try {
+      setLoading(true)
+      setError(null)
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        setError(data.error || "Invalid registration")
+        return
+      }
+
+      router.push("/login")
+    } catch {
+      setError("Registration failed")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -107,6 +130,7 @@ export default function RegisterPage() {
 
           <div>
             <button
+              disabled={loading}
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >

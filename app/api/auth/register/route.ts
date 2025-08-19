@@ -1,12 +1,10 @@
 import prisma from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { NextResponse } from "next/server"
+import { z } from "zod"
+import { registerFormSchema } from "@/zod/schemas/authSchemas"
 
-type RegisterRequestBody = {
-  name: string
-  email: string
-  password: string
-}
+type RegisterRequestBody = z.infer<typeof registerFormSchema>
 
 export async function POST(request: Request) {
   try {
