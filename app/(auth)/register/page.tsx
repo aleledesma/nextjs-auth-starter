@@ -3,11 +3,11 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { registerFormSchema } from "@/zod/schemas/authSchemas"
+import AuthInput from "@/components/AuthInput"
 
 export default function RegisterPage() {
   const {
@@ -63,65 +63,32 @@ export default function RegisterPage() {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-6">
-            <div>
-              <label
-                htmlFor="name"
-                className="text-slate-900 font-semibold text-sm"
-              >
-                Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                className="mt-2 appearance-none relative block w-full px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Full name"
-                {...register("name")}
-              />
-              {errors.name && (
-                <span className="text-sm text-red-500">
-                  {errors.name.message}
-                </span>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="text-slate-900 font-semibold text-sm"
-              >
-                Email address
-              </label>
-              <input
-                id="email"
-                className="mt-2 appearance-none relative block w-full px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                {...register("email")}
-              />
-              {errors.email && (
-                <span className="text-sm text-red-500">
-                  {errors.email.message}
-                </span>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="text-slate-900 font-semibold text-sm"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                className="mt-2 appearance-none relative block w-full px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                {...register("password")}
-              />
-              {errors.password && (
-                <span className="text-sm text-red-500">
-                  {errors.password.message}
-                </span>
-              )}
-            </div>
+            <AuthInput
+              id="name"
+              label="Full name"
+              register={register("name")}
+              type="text"
+              placeholder="John Doe"
+              error={errors.name}
+            />
+
+            <AuthInput
+              id="email"
+              label="Email address"
+              register={register("email")}
+              type="email"
+              placeholder="example@gmail.com"
+              error={errors.email}
+            />
+
+            <AuthInput
+              id="password"
+              label="Password"
+              register={register("password")}
+              type="password"
+              placeholder="********"
+              error={errors.password}
+            />
           </div>
 
           {error && (
