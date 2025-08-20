@@ -24,12 +24,10 @@
 
 - [x] Agregar roles básicos: ej: "admin" y "user"
 
-- [ ] Agregar ruta protegida /dashboard para ejemplificar autorización
+- [x] Agregar ruta protegida /dashboard para ejemplificar autorización
 
-- [ ] Agregar autentificación mediante Google provider
+- [x] Refactoring simple
 
-- [ ] Refactoring simple
+- [x] Formateo de todo el proyecto
 
-- [ ] Instalar prettier, configurar reglas, y hacer un formateo de todo el proyecto
-
-- [ ] Reestructurar / organizar routes folders usando grouping ej: auth routes dentro del (auth), rutas protegidas dentro de (protected)
+- [x] Reestructurar / organizar routes folders usando grouping ej: auth routes dentro del (auth), rutas protegidas dentro de (protected)
